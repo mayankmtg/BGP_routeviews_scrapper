@@ -37,7 +37,7 @@ class DownloadThread(threading.Thread):
 #		print "[%s] Downloading %s -> %s"%(self.ident, url, dest)
 #		urllib.urlretrieve(url, dest)
 
-def download(urls, destfolder, numthreads=30):
+def download(urls, destfolder, numthreads=16):
 	queue = Queue()
 	for url in urls:
 		queue.put(url)
@@ -73,10 +73,7 @@ vantagePoints=[
 "/route-views.soxrs/bgpdata"
 ]
 
-ribDate="/2017.12/RIBS/rib.201712"
-# day
-# time
-ribExtension="00.bz2"
+ribDate="/2017.12/RIBS/rib.20171231.0000.bz2"
 
 
 
@@ -85,9 +82,7 @@ for point in vantagePoints:
 		os.stat(point.split('/')[1])
 	except:
 		os.mkdir(point.split('/')[1])
-	for day in range(1,30):
-		for time in range(0,23,2):
-			finalurl=routeViews+point+ribDate+str(day).zfill(2) + "."+str(time).zfill(2)+ribExtension
-			RibUrls.append(finalurl)
+	finalurl=routeViews+point+ribDate
+	RibUrls.append(finalurl)
 
 download(RibUrls, "/ribs_from_script")
