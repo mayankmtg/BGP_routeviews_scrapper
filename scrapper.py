@@ -22,10 +22,12 @@ class DownloadThread(threading.Thread):
 			self.queue.task_done()
 
 	def download_url(self,url):
+		vantage_folder=str(url.split('/')[3])
 		name=str(url.split('/')[-1])
-		destination=os.path.join(self.destfolder, name)
+		destination="./"+vantage_folder+"/"+name
+		print(destination)
 		r=requests.get(url, allow_redirects=True)
-		open(name, 'wb').write(r.content)
+		open(destination, 'wb').write(r.content)
 		print(name)
 
 #	def download_url(self, url):
@@ -35,7 +37,7 @@ class DownloadThread(threading.Thread):
 #		print "[%s] Downloading %s -> %s"%(self.ident, url, dest)
 #		urllib.urlretrieve(url, dest)
 
-def download(urls, destfolder, numthreads=16):
+def download(urls, destfolder, numthreads=30):
 	queue = Queue()
 	for url in urls:
 		queue.put(url)
@@ -79,6 +81,10 @@ ribExtension="00.bz2"
 
 
 for point in vantagePoints:
+	try:
+		os.stat(point.split('/')[1])
+	except:
+		os.mkdir(point.split('/')[1])
 	for day in range(1,30):
 		for time in range(0,23,2):
 			finalurl=routeViews+point+ribDate+str(day).zfill(2) + "."+str(time).zfill(2)+ribExtension
