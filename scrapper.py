@@ -37,7 +37,7 @@ class DownloadThread(threading.Thread):
 #		print "[%s] Downloading %s -> %s"%(self.ident, url, dest)
 #		urllib.urlretrieve(url, dest)
 
-def download(urls, destfolder, numthreads=16):
+def download(urls, destfolder, numthreads=30):
 	queue = Queue()
 	for url in urls:
 		queue.put(url)
@@ -61,8 +61,8 @@ vantagePoints=[
 "/route-views.kixp/bgpdata",
 "/route-views.jinx/bgpdata",
 "/route-views.linx/bgpdata",
-"/route-views.napafrica/bgpdata",
-"/route-views.nwax/bgpdata",
+#"/route-views.napafrica/bgpdata",
+#"/route-views.nwax/bgpdata",
 "/route-views.telxatl/bgpdata",
 "/route-views.wide/bgpdata",
 "/route-views.sydney/bgpdata",
@@ -73,7 +73,7 @@ vantagePoints=[
 "/route-views.soxrs/bgpdata"
 ]
 
-ribDate="/2017.12/RIBS/rib.20171231.0000.bz2"
+ribDate=["/2013.12/RIBS/rib.20131231.0000.bz2","/2014.12/RIBS/rib.20141231.0000.bz2","/2015.12/RIBS/rib.20151231.0000.bz2","/2016.12/RIBS/rib.20161231.0000.bz2","/2017.12/RIBS/rib.20171231.0000.bz2"]
 
 
 
@@ -82,7 +82,8 @@ for point in vantagePoints:
 		os.stat(point.split('/')[1])
 	except:
 		os.mkdir(point.split('/')[1])
-	finalurl=routeViews+point+ribDate
-	RibUrls.append(finalurl)
+	for yr in ribDate:
+		finalurl=routeViews+point+yr
+		RibUrls.append(finalurl)
 
 download(RibUrls, "/ribs_from_script")
