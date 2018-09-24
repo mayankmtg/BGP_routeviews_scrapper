@@ -1,1 +1,6 @@
 *.bz2
+processed/
+relations/
+route-views*/
+zebra-dump-parser/
+rel.txt
